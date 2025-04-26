@@ -2,26 +2,32 @@
 <html lang="hu">
 <head>
     <meta charset="UTF-8">
-    <title>Albumok kezelése</title>
+    <title>Albumok</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Zenekarok Albumai</h1>
 
-    <section id="album-form">
+    <section id="album-form-section">
         <h2>Új album hozzáadása</h2>
-        <input type="text" id="band" placeholder="Zenekar neve">
-        <input type="text" id="title" placeholder="Album címe">
-        <div id="songs">
-            <h3>Dalok</h3>
-            <button id="add-song">Új dal hozzáadása</button>
-        </div>
-        <button id="save-album">Mentés</button>
+        <form id="album-form">
+            <input type="text" id="band" placeholder="Zenekar neve" required>
+            <input type="text" id="title" placeholder="Album címe" required>
+            <div id="songs">
+                <h3>Dalok</h3>
+                <div class="song">
+                    <input type="text" placeholder="Dal címe" class="song-title" required>
+                    <input type="text" placeholder="Hossz (pl. 3:45)" class="song-length" required>
+                </div>
+            </div>
+            <button type="button" id="add-song">Új dal hozzáadása</button>
+            <button type="submit">Mentés</button>
+        </form>
     </section>
 
-    <section id="albums-list">
-        <h2>Albumok</h2>
-        <ul id="albums"></ul>
+    <section id="album-list-section">
+        <h2>Albumok listája</h2>
+        <ul id="album-list"></ul>
     </section>
 
     <script src="java.js"></script>

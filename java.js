@@ -1,148 +1,108 @@
-const API_URL = "http://localhost:3000/albums";
+const API_URL = 'http://localhost:3000/albums';
 
-document.getElementById('add-song').addEventListener('click', addSongField);
-document.getElementById('save-album').addEventListener('click', saveAlbum);
+document.addEventListener('DOMContentLoaded', () => {
+    loadAlbums();
+
+    document.getElementById('album-form').addEventListener('submit', createAlbum);
+    document.getElementById('add-song').addEventListener('click', addSongInput);
+});
 
 async function loadAlbums() {
-    const response = await fetch(API_URL);
-    const albums = await response.json();
-
-    const albumsList = document.getElementById('albums');
-    albumsList.innerHTML = '';
+    const res = await fetch(API_URL);
+    const albums = await res.json();
+    const list = document.getElementById('album-list');
+    list.innerHTML = '';
 
     albums.forEach(album => {
         const li = document.createElement('li');
-        li.className = 'album';
         li.innerHTML = `
-            <strong>${album.band}</strong> - ${album.title} (${album.songCount} dal, ${album.totalLength})
-            <div class="album-actions">
-                <button onclick="viewAlbum(${album.id})">Megtekintés</button>
-                <button onclick="editAlbum(${album.id})">Szerkesztés</button>
-                <button onclick="deleteAlbum(${album.id})">Törlés</button>
-            </div>
-            <div id="details-${album.id}"></div>
+            <strong>${album.band} - ${album.title}</strong> (${album.songCount} dal, ${album.totalLength})
+            <button onclick="showAlbum(${album.id})">Megnéz</button>
+            <button onclick="deleteAlbum(${album.id})">Törlés</button>
+            <div id="album-${album.id}-details" class="album-details" style="display: none;"></div>
         `;
-        albumsList.appendChild(li);
+        list.appendChild(li);
     });
 }
 
-function addSongField() {
-    const songsDiv = document.getElementById('songs');
-    const inputTitle = document.createElement('input');
-    inputTitle.placeholder = "Dal címe";
-    inputTitle.className = 'song-title';
+async function showAlbum(id) {
+    const detailsContainer = document.getElementById(`album-${id}-details`);
+    if (detailsContainer.style.display === 'none') {
+        const res = await fetch(`${API_URL}/${id}`);
+        const album = await res.json();
 
-    const inputLength = document.createElement('input');
-    inputLength.placeholder = "Hossz (perc:mp)";
-    inputLength.className = 'song-length';
-
-    songsDiv.appendChild(inputTitle);
-    songsDiv.appendChild(inputLength);
+        detailsContainer.innerHTML = `
+            <h3>${album.band} - ${album.title}</h3>
+            <p><strong>Dalok száma:</strong> ${album.songCount}</p>
+            <p><strong>Teljes hossz:</strong> ${album.totalLength}</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Dal címe</th>
+                        <th>Hossza</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${album.songs.map(song => `
+                        <tr>
+                            <td>${song.title}</td>
+                            <td>${song.length}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
+        detailsContainer.style.display = 'block';
+    } else {
+        detailsContainer.style.display = 'none';
+    }
 }
 
-async function saveAlbum() {
+async function createAlbum(e) {
+    e.preventDefault();
+
     const band = document.getElementById('band').value;
     const title = document.getElementById('title').value;
-    const songTitles = document.querySelectorAll('.song-title');
-    const songLengths = document.querySelectorAll('.song-length');
+    const songElements = document.querySelectorAll('#songs .song');
 
-    const songs = [];
+    const songs = Array.from(songElements).map(div => ({
+        title: div.querySelector('.song-title').value,
+        length: div.querySelector('.song-length').value
+    }));
 
-    for (let i = 0; i < songTitles.length; i++) {
-        const songTitle = songTitles[i].value.trim();
-        const songLength = songLengths[i].value.trim();
-        if (songTitle && songLength) {
-            songs.push({ title: songTitle, length: songLength });
-        }
-    }
-
-    if (!band || !title || songs.length === 0) {
-        alert('Tölts ki minden mezőt!');
-        return;
-    }
-
-    await fetch(API_URL, {
+    const res = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ band, title, songs })
     });
 
-    document.getElementById('band').value = '';
-    document.getElementById('title').value = '';
-    document.getElementById('songs').innerHTML = '<h3>Dalok</h3><button id="add-song">Új dal hozzáadása</button>';
-    document.getElementById('add-song').addEventListener('click', addSongField);
-
-    loadAlbums();
-}
-
-async function viewAlbum(id) {
-    const response = await fetch(`${API_URL}/${id}`);
-    const album = await response.json();
-    const detailsDiv = document.getElementById(`details-${id}`);
-
-    detailsDiv.innerHTML = album.songs.map(song => `<div class="song-item">${song.title} - ${song.length}</div>`).join('');
-}
-
-async function editAlbum(id) {
-    const response = await fetch(`${API_URL}/${id}`);
-    const album = await response.json();
-
-    document.getElementById('band').value = album.band;
-    document.getElementById('title').value = album.title;
-    document.getElementById('songs').innerHTML = '<h3>Dalok</h3>';
-
-    album.songs.forEach(song => {
-        const inputTitle = document.createElement('input');
-        inputTitle.placeholder = "Dal címe";
-        inputTitle.className = 'song-title';
-        inputTitle.value = song.title;
-
-        const inputLength = document.createElement('input');
-        inputLength.placeholder = "Hossz (perc:mp)";
-        inputLength.className = 'song-length';
-        inputLength.value = song.length;
-
-        document.getElementById('songs').appendChild(inputTitle);
-        document.getElementById('songs').appendChild(inputLength);
-    });
-
-    document.getElementById('save-album').onclick = async function() {
-        const band = document.getElementById('band').value;
-        const title = document.getElementById('title').value;
-        const songTitles = document.querySelectorAll('.song-title');
-        const songLengths = document.querySelectorAll('.song-length');
-
-        const songs = [];
-
-        for (let i = 0; i < songTitles.length; i++) {
-            const songTitle = songTitles[i].value.trim();
-            const songLength = songLengths[i].value.trim();
-            if (songTitle && songLength) {
-                songs.push({ title: songTitle, length: songLength });
-            }
-        }
-
-        await fetch(`${API_URL}/${id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ band, title, songs })
-        });
-
-        document.getElementById('band').value = '';
-        document.getElementById('title').value = '';
-        document.getElementById('songs').innerHTML = '<h3>Dalok</h3><button id="add-song">Új dal hozzáadása</button>';
-        document.getElementById('add-song').addEventListener('click', addSongField);
-
+    if (res.ok) {
+        document.getElementById('album-form').reset();
+        document.getElementById('songs').innerHTML = `
+            <h3>Dalok</h3>
+            <div class="song">
+                <input type="text" placeholder="Dal címe" class="song-title" required>
+                <input type="text" placeholder="Hossz (pl. 3:45)" class="song-length" required>
+            </div>
+        `;
         loadAlbums();
-    };
+    }
 }
 
 async function deleteAlbum(id) {
-    if (confirm('Biztos törlöd ezt az albumot?')) {
+    if (confirm('Biztosan törlöd az albumot?')) {
         await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
         loadAlbums();
     }
 }
 
-// Első betöltés
-loadAlbums();
+function addSongInput() {
+    const songsDiv = document.getElementById('songs');
+    const newSongDiv = document.createElement('div');
+    newSongDiv.classList.add('song');
+    newSongDiv.innerHTML = `
+        <input type="text" placeholder="Dal címe" class="song-title" required>
+        <input type="text" placeholder="Hossz (pl. 3:45)" class="song-length" required>
+    `;
+    songsDiv.appendChild(newSongDiv);
+}
