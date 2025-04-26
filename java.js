@@ -15,31 +15,41 @@ async function loadAlbums() {
 
     albums.forEach(album => {
         const li = document.createElement('li');
+        li.classList.add('album-item');
         li.innerHTML = `
-            <strong>${album.band} - ${album.title}</strong> (${album.songCount} dal, ${album.totalLength})
-            <button onclick="showAlbum(${album.id})">Megnéz</button>
-            <button onclick="deleteAlbum(${album.id})">Törlés</button>
+            <div class="album-header" data-id="${album.id}">
+                <span class="arrow">▶</span>
+                <strong>${album.band} - ${album.title}</strong>
+            </div>
             <div id="album-${album.id}-details" class="album-details" style="display: none;"></div>
         `;
         list.appendChild(li);
     });
+
+    document.querySelectorAll('.album-header').forEach(header => {
+        header.addEventListener('click', (e) => {
+            const id = e.currentTarget.dataset.id;
+            toggleAlbumDetails(id, e.currentTarget);
+        });
+    });
 }
 
-async function showAlbum(id) {
+async function toggleAlbumDetails(id, headerElement) {
     const detailsContainer = document.getElementById(`album-${id}-details`);
+    const arrow = headerElement.querySelector('.arrow');
+
     if (detailsContainer.style.display === 'none') {
         const res = await fetch(`${API_URL}/${id}`);
         const album = await res.json();
 
         detailsContainer.innerHTML = `
-            <h3>${album.band} - ${album.title}</h3>
-            <p><strong>Dalok száma:</strong> ${album.songCount}</p>
-            <p><strong>Teljes hossz:</strong> ${album.totalLength}</p>
+            <h2>${album.band} - ${album.title}</h3>
+            <h3>${album.songCount} dal • ${album.totalLength}</h3>
             <table>
                 <thead>
                     <tr>
-                        <th>Dal címe</th>
-                        <th>Hossza</th>
+                        <th>Cím</th>
+                        <th>🕒</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,10 +61,16 @@ async function showAlbum(id) {
                     `).join('')}
                 </tbody>
             </table>
+            <div class="action-buttons">
+                <button onclick="editAlbum(${album.id})">Szerkesztés</button>
+                <button onclick="deleteAlbum(${album.id})">Törlés</button>
+            </div>
         `;
         detailsContainer.style.display = 'block';
+        arrow.textContent = '▼';  // lenyitva
     } else {
         detailsContainer.style.display = 'none';
+        arrow.textContent = '▶';  // összecsukva
     }
 }
 
@@ -105,4 +121,8 @@ function addSongInput() {
         <input type="text" placeholder="Hossz (pl. 3:45)" class="song-length" required>
     `;
     songsDiv.appendChild(newSongDiv);
+}
+
+function editAlbum(id) {
+    alert('Szerkesztés még nincs kész!'); // ide majd később jöhet a szerkesztős kód
 }
