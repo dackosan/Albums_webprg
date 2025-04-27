@@ -58,17 +58,22 @@ export async function initializeDatabase() {
 
     // Első album: PP2
     const songs1 = [
-        ["Intro", "1:23"],
-        ["Flex", "3:12"],
-        ["Gengszter mód", "2:55"],
-        ["PP2", "4:10"],
-        ["Outro", "4:02"],
+        ["Intro", "1:17"],
+        ["Szeged Felől", "2:23"],
+        ["Feminist", "2:24"],
+        ["Január", "2:54"],
+        ["PPP", "1:56"],
+        ["2M", "2:45"],
+        ["Zura", "4:01"],
+        ["Kobe", "3:18"],
+        ["Baktérium Cypher", "3:46"],
+        ["Zootiez", "3:42"],
     ];
     const totalLength1 = calculateTotalLength(songs1);
 
     const albumId1 = (await dbRun(
         "INSERT INTO albums (band, title, songCount, totalLength) VALUES (?, ?, ?, ?)",
-        ["gyuris, grasa, ibbigang", "PP2", songs1.length, totalLength1]
+        ["Gyuris, Grasa, Ibbigang", "PP2", songs1.length, totalLength1]
     )).lastID;
 
     for (const [title, length] of songs1) {
@@ -83,30 +88,30 @@ export async function initializeDatabase() {
         ["EVIL JORDAN", "3:03"],
         ["MOJO JOJO", "2:36"],
         ["PHILLY (with Travis Scott)", "3:05"],
-        ["RADAR", "3:05"],
-        ["RATHER LIE (with Weeknd)", "3:05"],
-        ["FINE SHIT", "3:05"],
-        ["BACKD00R (feat. Kendrick Lamar & Jhené Aiko)", "3:05"],
-        ["TOXIC (with Skepta)", "3:05"],
-        ["MUNYUN", "3:05"],
-        ["CRANK", "3:05"],
-        ["CHARGE DEM HOES A FEE (with Future & Travis Scott)", "3:05"],
-        ["GOOD CREDIT (with Kendrick Lamar)", "3:05"],
-        ["I SEEEE YOU BABY BOI", "3:05"],
-        ["WAKE UP F1LTHY (with Travis Scott)", "3:05"],
-        ["JUMPIN (with LIl Uzi Vert)", "3:05"],
-        ["TRIM (with Future)", "3:05"],
-        ["COCAINE NOSE", "3:05"],
-        ["WE NEED ALL DA VIBES (with Young Thug & Ty Dolla $ign)", "3:05"],
-        ["OLYMPIAN", "3:05"],
-        ["OPM BABY", "3:05"],
-        ["TWIN TRIM (with LIl Uzi Vert)", "3:05"],
-        ["LIKE WEEZY", "3:05"],
-        ["DIS 1 GOT IT", "3:05"],
-        ["WALK", "3:05"],
-        ["HBA", "3:05"],
-        ["OVERLY", "3:05"],
-        ["SOUTH ATLANTA BABY", "3:05"],
+        ["RADAR", "1:47"],
+        ["RATHER LIE (with Weeknd)", "3:29"],
+        ["FINE SHIT", "1:46"],
+        ["BACKD00R (feat. Kendrick Lamar & Jhené Aiko)", "3:10"],
+        ["TOXIC (with Skepta)", "2:15"],
+        ["MUNYUN", "2:34"],
+        ["CRANK", "2:27"],
+        ["CHARGE DEM HOES A FEE (with Future & Travis Scott)", "3:45"],
+        ["GOOD CREDIT (with Kendrick Lamar)", "3:10"],
+        ["I SEEEE YOU BABY BOI", "2:38"],
+        ["WAKE UP F1LTHY (with Travis Scott)", "2:49"],
+        ["JUMPIN (with LIl Uzi Vert)", "1:32"],
+        ["TRIM (with Future)", "3:13"],
+        ["COCAINE NOSE", "2:31"],
+        ["WE NEED ALL DA VIBES (with Young Thug & Ty Dolla $ign)", "3:01"],
+        ["OLYMPIAN", "2:54"],
+        ["OPM BABY", "2:53"],
+        ["TWIN TRIM (with LIl Uzi Vert)", "1:34"],
+        ["LIKE WEEZY", "1:55"],
+        ["DIS 1 GOT IT", "2:03"],
+        ["WALK", "1:34"],
+        ["HBA", "3:32"],
+        ["OVERLY", "1:45"],
+        ["SOUTH ATLANTA BABY", "2:13"],
     ];
     const totalLength2 = calculateTotalLength(songs2);
 
