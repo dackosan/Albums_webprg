@@ -62,7 +62,7 @@ form h3 {
 /* Album list styles */
 ul{
     list-style: none;
-    width: 1000px;
+    width: 900px;
     margin: auto;
 }
 
@@ -95,6 +95,10 @@ li{
     background-color: #f9f9f9;
     border: 1px solid #ccc;
     border-radius: 5px;
+}
+
+.album-details>h3{
+    margin-top: 10px;
 }
 
 .action-buttons {

@@ -19,7 +19,7 @@ async function loadAlbums() {
         li.innerHTML = `
             <div class="album-header" data-id="${album.id}">
                 <span class="arrow">▶</span>
-                <strong>${album.band} - ${album.title}</strong>
+                <strong>${album.band} – ${album.title}</strong>
             </div>
             <div id="album-${album.id}-details" class="album-details" style="display: none;"></div>
         `;
@@ -43,7 +43,7 @@ async function toggleAlbumDetails(id, headerElement) {
         const album = await res.json();
 
         detailsContainer.innerHTML = `
-            <h2>${album.band} - ${album.title}</h3>
+            <h2>${album.band} – ${album.title}</h3>
             <h3>${album.songCount} dal • ${album.totalLength}</h3>
             <table>
                 <thead>
@@ -126,3 +126,5 @@ function addSongInput() {
 function editAlbum(id) {
     alert('Szerkesztés még nincs kész!'); // ide majd később jöhet a szerkesztős kód
 }
+
+//59, 51 sor -> <td>${song.id}</td> <td>$Id</td>
