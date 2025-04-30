@@ -3,12 +3,11 @@ const API_URL = 'http://localhost:3000/albums';
 document.addEventListener('DOMContentLoaded', () => {
     loadAlbums();
 
-    document.getElementById('album-form').addEventListener('submit', createAlbum);
-    document.getElementById('add-song').addEventListener('click', addSongInput);
-
     document.getElementById('open-add-modal').addEventListener('click', () => {
         document.getElementById('add-modal').style.display = 'flex';
     });
+
+    document.getElementById('album-form').addEventListener('submit', createAlbum);
 
     document.getElementById('cancel-add').addEventListener('click', () => {
         document.getElementById('add-modal').style.display = 'none';
@@ -89,29 +88,17 @@ async function createAlbum(e) {
 
     const band = document.getElementById('band').value;
     const title = document.getElementById('title').value;
-    const songElements = document.querySelectorAll('#songs .song');
-
-    const songs = Array.from(songElements).map(div => ({
-        title: div.querySelector('.song-title').value,
-        length: div.querySelector('.song-length').value
-    }));
 
     const res = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ band, title, songs })
+        body: JSON.stringify({ band, title, songs: [] })  // Dalok nem kerülnek hozzáadásra itt
     });
 
     if (res.ok) {
-        document.getElementById('album-form').reset();
-        document.getElementById('songs').innerHTML = `
-            <h3>Dalok</h3>
-            <div class="song">
-                <input type="text" placeholder="Dal címe" class="song-title" required>
-                <input type="text" placeholder="Hossz (pl. 3:45)" class="song-length" required>
-            </div>
-        `;
-        loadAlbums();
+        document.getElementById('album-form').reset();  // Töröljük az űrlap adatokat
+        document.getElementById('add-modal').style.display = 'none';  // Bezárjuk a modált
+        loadAlbums();  // Az albumok frissítése
     }
 }
 
@@ -174,5 +161,3 @@ document.getElementById('save-edit').addEventListener('click', async () => {
         alert('Nem sikerült frissíteni!');
     }
 });
-
-//59, 51 sor -> <td>${song.id}</td> <td>$Id</td>

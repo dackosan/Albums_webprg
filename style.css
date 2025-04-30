@@ -262,3 +262,26 @@ th:nth-child(3) {
     font-size: 14px;
     cursor: pointer;
 }
+
+#album-form-section {
+    text-align: center;
+}
+
+#album-form {
+    display: inline-block;
+    margin-top: 20px;
+}
+
+.add-button{
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.add-button:hover{
+    background-color: darkgreen;
+}
