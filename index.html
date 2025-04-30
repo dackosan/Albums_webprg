@@ -7,29 +7,51 @@
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 </head>
 <body>
-    <h1>Albumok</h1>
+    <div class="header-container">
+        <h1>Albumok</h1>
+        <button id="open-add-modal">+</button>
+    </div>        
 
     <section id="album-list-section">
         <ul id="album-list"></ul>
         <i class='fas fa-angle-left'></i>
     </section>
 
-    <section id="album-form-section">
-        <h2>Új album hozzáadása</h2>
-        <form id="album-form">
-            <input type="text" id="band" placeholder="Zenekar neve" required>
-            <input type="text" id="title" placeholder="Album címe" required>
-            <div id="songs">
-                <h3>Dalok</h3>
-                <div class="song">
-                    <input type="text" placeholder="Dal címe" class="song-title" required>
-                    <input type="text" placeholder="Hossz (pl. 3:45)" class="song-length" required>
+    <div id="edit-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Album szerkesztése</h2>
+            <label>Zenekar:</label>
+            <input type="text" id="edit-band"><br>
+            <label>Cím:</label>
+            <input type="text" id="edit-title"><br>
+            <label>Dalok száma:</label>
+            <input type="number" id="edit-songCount" disabled><br>
+            <label>Összidő:</label>
+            <input type="text" id="edit-totalLength" disabled><br><br>
+            <button id="save-edit">Mentés</button>
+            <button id="cancel-edit">Mégse</button>
+        </div>
+    </div>
+
+    <div id="add-modal" class="modal">
+        <div class="modal-content">
+            <h2>Új album hozzáadása</h2>
+            <form id="album-form">
+                <input type="text" id="band" placeholder="Zenekar neve" required>
+                <input type="text" id="title" placeholder="Album címe" required>
+                <div id="songs">
+                    <h3>Dalok</h3>
+                    <div class="song">
+                        <input type="text" placeholder="Dal címe" class="song-title" required>
+                        <input type="text" placeholder="Hossz (pl. 3:45)" class="song-length" required>
+                    </div>
                 </div>
-            </div>
-            <button type="button" id="add-song">Új dal hozzáadása</button>
-            <button type="submit">Mentés</button>
-        </form>
-    </section>
+                <button type="button" id="add-song">Új dal hozzáadása</button><br><br>
+                <button type="submit">Mentés</button>
+                <button type="button" id="cancel-add">Mégse</button>
+            </form>
+        </div>
+    </div>    
 
     <script src="java.js"></script>
 </body>

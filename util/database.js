@@ -80,44 +80,23 @@ export async function initializeDatabase() {
         await dbRun("INSERT INTO songs (albumId, title, length) VALUES (?, ?, ?)", [albumId1, title, length]);
     }
 
-    //Playboi Carti
+    //BB
     const songs2 = [
-        ["POP OUT", "2:41"],
-        ["CRUSH (with Travis Scott)", "2:53"],
-        ["K POP", "1:52"],
-        ["EVIL JORDAN", "3:03"],
-        ["MOJO JOJO", "2:36"],
-        ["PHILLY (with Travis Scott)", "3:05"],
-        ["RADAR", "1:47"],
-        ["RATHER LIE (with Weeknd)", "3:29"],
-        ["FINE SHIT", "1:46"],
-        ["BACKD00R (feat. Kendrick Lamar & Jhené Aiko)", "3:10"],
-        ["TOXIC (with Skepta)", "2:15"],
-        ["MUNYUN", "2:34"],
-        ["CRANK", "2:27"],
-        ["CHARGE DEM HOES A FEE (with Future & Travis Scott)", "3:45"],
-        ["GOOD CREDIT (with Kendrick Lamar)", "3:10"],
-        ["I SEEEE YOU BABY BOI", "2:38"],
-        ["WAKE UP F1LTHY (with Travis Scott)", "2:49"],
-        ["JUMPIN (with LIl Uzi Vert)", "1:32"],
-        ["TRIM (with Future)", "3:13"],
-        ["COCAINE NOSE", "2:31"],
-        ["WE NEED ALL DA VIBES (with Young Thug & Ty Dolla $ign)", "3:01"],
-        ["OLYMPIAN", "2:54"],
-        ["OPM BABY", "2:53"],
-        ["TWIN TRIM (with LIl Uzi Vert)", "1:34"],
-        ["LIKE WEEZY", "1:55"],
-        ["DIS 1 GOT IT", "2:03"],
-        ["WALK", "1:34"],
-        ["HBA", "3:32"],
-        ["OVERLY", "1:45"],
-        ["SOUTH ATLANTA BABY", "2:13"],
+        ["10 PINK BB", "2:57"],
+        ["FREESTYLE", "2:17"],
+        ["MAGASAN", "3:00"],
+        ["BB", "2:51"],
+        ["HIWAY", "3:05"],
+        ["BOOTYSHAKER", "2:14"],
+        ["KÉSZEBBEN, MINT VALAHA", "3:36"],
+        ["BASZ", "3:20"],
+        ["ISTEN VELEM", "3:02"],
     ];
     const totalLength2 = calculateTotalLength(songs2);
 
     const albumId2 = (await dbRun(
         "INSERT INTO albums (band, title, songCount, totalLength) VALUES (?, ?, ?, ?)",
-        ["Playboi Carti", "I AM MUSIC", songs2.length, totalLength2]
+        ["Gyuris, Grasa", "BARBATULA BARBATULA", songs2.length, totalLength2]
     )).lastID;
 
     for (const [title, length] of songs2) {

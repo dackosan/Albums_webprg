@@ -5,6 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('album-form').addEventListener('submit', createAlbum);
     document.getElementById('add-song').addEventListener('click', addSongInput);
+
+    document.getElementById('open-add-modal').addEventListener('click', () => {
+        document.getElementById('add-modal').style.display = 'flex';
+    });
+
+    document.getElementById('cancel-add').addEventListener('click', () => {
+        document.getElementById('add-modal').style.display = 'none';
+    });
 });
 
 async function loadAlbums() {
@@ -48,13 +56,15 @@ async function toggleAlbumDetails(id, headerElement) {
             <table>
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Cím</th>
                         <th>🕒</th>
                     </tr>
                 </thead>
                 <tbody>
-                    ${album.songs.map(song => `
+                    ${album.songs.map((song, index) => `
                         <tr>
+                            <td>${index + 1}</td>
                             <td>${song.title}</td>
                             <td>${song.length}</td>
                         </tr>
@@ -126,5 +136,43 @@ function addSongInput() {
 function editAlbum(id) {
     alert('Szerkesztés még nincs kész!'); // ide majd később jöhet a szerkesztős kód
 }
+
+let currentEditingId = null;
+
+function editAlbum(id) {
+    fetch(`${API_URL}/${id}`)
+        .then(res => res.json())
+        .then(album => {
+            currentEditingId = id;
+            document.getElementById('edit-band').value = album.band;
+            document.getElementById('edit-title').value = album.title;
+            document.getElementById('edit-songCount').value = album.songCount;
+            document.getElementById('edit-totalLength').value = album.totalLength;
+            document.getElementById('edit-modal').style.display = 'flex';
+        });
+}
+
+document.getElementById('cancel-edit').addEventListener('click', () => {
+    document.getElementById('edit-modal').style.display = 'none';
+});
+
+document.getElementById('save-edit').addEventListener('click', async () => {
+    const band = document.getElementById('edit-band').value;
+    const title = document.getElementById('edit-title').value;
+
+    // Küldés szerverre PUT-tal, meglévő dalokat NEM módosítjuk
+    const res = await fetch(`${API_URL}/${currentEditingId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ band, title })
+    });
+
+    if (res.ok) {
+        document.getElementById('edit-modal').style.display = 'none';
+        loadAlbums();
+    } else {
+        alert('Nem sikerült frissíteni!');
+    }
+});
 
 //59, 51 sor -> <td>${song.id}</td> <td>$Id</td>

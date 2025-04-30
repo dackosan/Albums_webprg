@@ -48,28 +48,11 @@ app.post('/albums', async (req, res) => {
 
 // Update album
 app.put('/albums/:id', async (req, res) => {
+    const { band, title } = req.body;
     const { id } = req.params;
-    const { band, title, songs } = req.body;
 
-    const existing = await dbGet("SELECT * FROM albums WHERE id = ?", [id]);
-    if (!existing) return res.status(404).json({ message: "Album not found!" });
-
-    const songCount = songs.length;
-    const totalSeconds = songs.reduce((acc, song) => {
-        const [min, sec] = song.length.split(':').map(Number);
-        return acc + min * 60 + sec;
-    }, 0);
-    const totalLength = `${Math.floor(totalSeconds / 60)}:${(totalSeconds % 60).toString().padStart(2, '0')}`;
-
-    await dbRun("UPDATE albums SET band = ?, title = ?, songCount = ?, totalLength = ? WHERE id = ?", [band, title, songCount, totalLength, id]);
-
-    await dbRun("DELETE FROM songs WHERE albumId = ?", [id]);
-
-    for (const song of songs) {
-        await dbRun("INSERT INTO songs (albumId, title, length) VALUES (?, ?, ?)", [id, song.title, song.length]);
-    }
-
-    res.json({ id: +id, band, title, songCount, totalLength });
+    await dbRun(`UPDATE albums SET band = ?, title = ? WHERE id = ?`, [band, title, id]);
+    res.sendStatus(200);
 });
 
 // Delete album
