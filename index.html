@@ -47,6 +47,18 @@
         </div>
     </div>
 
+    <div id="add-song-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Új dal hozzáadása</h2>
+            <form id="add-song-form">
+                <input type="text" id="new-song-title" placeholder="Dal címe" required>
+                <input type="text" id="new-song-length" placeholder="Hossz (pl. 3:45)" required>
+                <button type="submit">Hozzáadás</button>
+                <button type="button" id="cancel-song">Mégse</button>
+            </form>
+        </div>
+    </div>    
+
     <script src="java.js"></script>
 </body>
 </html>

@@ -101,19 +101,27 @@ li{
     border-radius: 5px;
     border: none;
     cursor: pointer;
-    background-color: rgb(226, 173, 74);
+    background-color: rgb(128, 188, 37);
     color: white;
 }
 
 .action-buttons button:hover {
-    background-color: rgb(229, 149, 0);
+    background-color: rgb(22, 146, 22);
 }
 
 .action-buttons button:nth-child(2) {
-    background-color: #ff6347;
+    background-color: rgb(226, 173, 74);
 }
 
 .action-buttons button:nth-child(2):hover {
+    background-color: rgb(229, 149, 0);
+}
+
+.action-buttons button:nth-child(3) {
+    background-color: #ff6347;
+}
+
+.action-buttons button:nth-child(3):hover {
     background-color: red;
 }
 

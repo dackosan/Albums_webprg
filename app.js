@@ -46,6 +46,31 @@ app.post('/albums', async (req, res) => {
     res.status(201).json({ id: albumResult.lastID, band, title, songCount, totalLength });
 });
 
+app.post('/albums/:id/songs', async (req, res) => {
+    const { id } = req.params;
+    const { title, length } = req.body;
+
+    if (!title || !length) {
+        return res.status(400).json({ message: "Hiányzó daladatok!" });
+    }
+
+    // Hozzáadás az adatbázishoz
+    await dbRun("INSERT INTO songs (albumId, title, length) VALUES (?, ?, ?)", [id, title, length]);
+
+    // Frissítjük az album songCount és totalLength mezőit is
+    const songs = await dbAll("SELECT * FROM songs WHERE albumId = ?", [id]);
+    const songCount = songs.length;
+    const totalSeconds = songs.reduce((acc, song) => {
+        const [min, sec] = song.length.split(':').map(Number);
+        return acc + min * 60 + sec;
+    }, 0);
+    const totalLength = `${Math.floor(totalSeconds / 60)}:${(totalSeconds % 60).toString().padStart(2, '0')}`;
+
+    await dbRun("UPDATE albums SET songCount = ?, totalLength = ? WHERE id = ?", [songCount, totalLength, id]);
+
+    res.status(201).json({ message: "Dal hozzáadva!" });
+});
+
 // Update album
 app.put('/albums/:id', async (req, res) => {
     const { band, title } = req.body;

@@ -71,6 +71,7 @@ async function toggleAlbumDetails(id, headerElement) {
                 </tbody>
             </table>
             <div class="action-buttons">
+                <button onclick="openAddSongModal(${album.id})">Új dal hozzáadása</button>
                 <button onclick="editAlbum(${album.id})">Szerkesztés</button>
                 <button onclick="deleteAlbum(${album.id})">Törlés</button>
             </div>
@@ -159,5 +160,45 @@ document.getElementById('save-edit').addEventListener('click', async () => {
         loadAlbums();
     } else {
         alert('Nem sikerült frissíteni!');
+    }
+});
+
+let currentAlbumIdForNewSong = null;
+
+function openAddSongModal(albumId) {
+    currentAlbumIdForNewSong = albumId;
+    document.getElementById('new-song-title').value = '';
+    document.getElementById('new-song-length').value = '';
+    document.getElementById('add-song-modal').style.display = 'flex';
+}
+
+document.getElementById('cancel-song').addEventListener('click', () => {
+    document.getElementById('add-song-modal').style.display = 'none';
+});
+
+document.getElementById('add-song-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const title = document.getElementById('new-song-title').value.trim();
+    const length = document.getElementById('new-song-length').value.trim();
+
+    // Ellenőrzés: hossz formátuma mm:ss, ahol ss 00-59
+    const timeRegex = /^([0-9]{1,2}):([0-5][0-9])$/;
+    if (!timeRegex.test(length)) {
+        alert('Hibás formátum! A hosszot így add meg: pl. 3:45 vagy 12:07');
+        return;
+    }
+
+    const res = await fetch(`http://localhost:3000/albums/${currentAlbumIdForNewSong}/songs`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, length })
+    });
+
+    if (res.ok) {
+        document.getElementById('add-song-modal').style.display = 'none';
+        loadAlbums();
+    } else {
+        alert('Nem sikerült hozzáadni a dalt!');
     }
 });
