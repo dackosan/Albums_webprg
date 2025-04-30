@@ -1,4 +1,6 @@
 const API_URL = 'http://localhost:3000/albums';
+let currentEditingId = null;
+let currentAlbumIdForNewSong = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     loadAlbums();
@@ -77,10 +79,10 @@ async function toggleAlbumDetails(id, headerElement) {
             </div>
         `;
         detailsContainer.style.display = 'block';
-        arrow.textContent = '▼';  // lenyitva
+        arrow.textContent = '▼';
     } else {
         detailsContainer.style.display = 'none';
-        arrow.textContent = '▶';  // összecsukva
+        arrow.textContent = '▶';
     }
 }
 
@@ -93,13 +95,13 @@ async function createAlbum(e) {
     const res = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ band, title, songs: [] })  // Dalok nem kerülnek hozzáadásra itt
+        body: JSON.stringify({ band, title, songs: [] })
     });
 
     if (res.ok) {
-        document.getElementById('album-form').reset();  // Töröljük az űrlap adatokat
-        document.getElementById('add-modal').style.display = 'none';  // Bezárjuk a modált
-        loadAlbums();  // Az albumok frissítése
+        document.getElementById('album-form').reset();
+        document.getElementById('add-modal').style.display = 'none';
+        loadAlbums();
     }
 }
 
@@ -122,12 +124,6 @@ function addSongInput() {
 }
 
 function editAlbum(id) {
-    alert('Szerkesztés még nincs kész!'); // ide majd később jöhet a szerkesztős kód
-}
-
-let currentEditingId = null;
-
-function editAlbum(id) {
     fetch(`${API_URL}/${id}`)
         .then(res => res.json())
         .then(album => {
@@ -148,7 +144,6 @@ document.getElementById('save-edit').addEventListener('click', async () => {
     const band = document.getElementById('edit-band').value;
     const title = document.getElementById('edit-title').value;
 
-    // Küldés szerverre PUT-tal, meglévő dalokat NEM módosítjuk
     const res = await fetch(`${API_URL}/${currentEditingId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -162,8 +157,6 @@ document.getElementById('save-edit').addEventListener('click', async () => {
         alert('Nem sikerült frissíteni!');
     }
 });
-
-let currentAlbumIdForNewSong = null;
 
 function openAddSongModal(albumId) {
     currentAlbumIdForNewSong = albumId;

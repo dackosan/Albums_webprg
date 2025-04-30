@@ -229,12 +229,13 @@ th:nth-child(3) {
     padding: 20px;
     border-radius: 10px;
     width: 90%;
-    max-width: 500px;
+    max-width: 400px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
 .modal-content h2 {
     margin-top: 0;
+    margin-bottom: 5px;
 }
 
 .modal-content label {
